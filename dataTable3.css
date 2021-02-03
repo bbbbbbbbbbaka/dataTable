@@ -1,0 +1,145 @@
+html,
+			body {
+					width: 100%;
+			}
+			
+			.main {
+					/* 	width: 100%; */
+					margin: 30px 30px 0px 270px;
+			}
+			
+			.header1 p {
+					height: 27px;
+					color: #a99a90;
+					font-size: 14.95;
+					text-align: left;
+					padding-left: 30px;
+					line-height: 27px;
+					margin-top: 13px;
+					margin-bottom: 26px;
+			}
+			
+			.scrd {
+					width: 100%;
+					background-color: #fff;
+					overflow: hidden;
+			}
+			
+			.head {
+					margin-left: 30px;
+			}
+			
+			.head p:nth-child(1) {
+					font-size: 16.45px;
+					margin-top: 30px;
+					margin-bottom: 10px;
+			}
+			
+			.head p:nth-child(2) {
+					color: #9c9c9c;
+					font-size: 13px;
+			}
+			
+			.search-table input {
+					width: 70%;
+					height: 27px;
+					margin-left: 30px;
+					margin-top: 20px;
+					border-bottom: 1px solid #f1f1f1;
+			}
+			
+			.search-table select {
+					box-sizing: border-box;
+					height: 29px;
+					/*  appearance:none; */
+					-moz-appearance: none;
+					/*   -webkit-appearance:none; */
+					border: solid 1px #fff;
+					border-bottom: 1px solid #f1f1f1;
+					margin-left: 20px;
+					width: 10%;
+					outline: none;
+					/* 取消选中框 */
+			}
+			/*   select::-ms-expand { display: none; 7 7 745 b      } */
+			
+			.search-table span {
+					display: inline-block;
+					margin: 0 15px;
+					width: 10%;
+					height: 35px;
+					line-height: 35px;
+					text-align: center;
+			}
+			
+			.tab {
+					margin-top: 40px;
+			}
+			
+			.tab table {
+					width: 100%;
+					margin: 0 20px 20px 20px;
+					box-sizing: border-box;
+					border-collapse: collapse
+			}
+			
+			.tab table th:nth-child(1) {
+					width: 19%;
+			}
+			
+			.tab table th:nth-child(2) {
+					width: 27%;
+			}
+			
+			.tab table th:nth-child(3) {
+					width: 16%;
+			}
+			
+			.tab table th:nth-child(4) {
+					width: 8%;
+			}
+			
+			.tab table th:nth-child(5) {
+					width: 14%;
+			}
+			
+			.tab table th:nth-child(6) {
+					width: 13%;
+			}
+			
+			td,
+			th {
+					line-height: 46px;
+					font-size: 13px;
+					border: 1px solid #f0efef;
+					padding-left: 10px;
+			}
+			
+			.pag {
+					text-align: center;
+					margin-bottom: 25px;
+			}
+			
+			.pag a {
+					display: inline-block;
+					width: 2.5em;
+					height: 2.5em;
+					background-color: #efefef;
+					border-radius: 50%;
+					line-height: 2.5em;
+					cursor: pointer;
+					color: #8a8a8a;
+			}
+			
+			.pag a:hover {
+					background-color: rgb(219, 218, 218);
+			}
+			
+			.current {
+					background-color: #2ebcfc !important;
+			}
+			
+			.dataTables_info {
+					margin: 0 auto;
+					text-align: center;
+			}
