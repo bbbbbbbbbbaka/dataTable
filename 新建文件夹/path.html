@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body,
+    html{
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+    .img{
+      position: absolute;
+      top: 300px;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <svg  width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="aa">
+    <path d="M50 100 L200 200 L100 100Z" fill="none" stroke="red"></path>
+    <path d="M100 150 H200 V-250" fill="none" stroke="red"></path>
+    <!--  M：用作起始点，L：起始点后面的线段；可以有多个M和L -->
+    <!--  Z：让画出来的线段闭合，默认是不闭合，填加在线段参数的后面 -->
+    <!--  H:水平绘制线段，表示x轴坐标；V:垂直绘制线段，表示y轴坐标；他们都只有一个参数，因为水平线的y轴一定和起始点的y轴相等，垂直线亦然； 如果这两个值是负数那么它就会往反方向绘制 -->
+    <!--  属性的大小写的区别：大写表示相对于画布当中的坐标，小写表示线段到起始点的距离 -->
+    
+
+    <!--  A属性用来绘制弧线 -->
+    <!--  A里面的每一个参数: 
+          X半径 Y半径(圆形的直径要大于两点之间的距离)
+          角度 用来旋转绘制出来的圆形，如果是一个正圆那么无论怎样变换角度他的样子不会改变，如果是一个椭圆那么他变换角度之后的样子就会与之前不一样
+          弧长(弧长参数为0和1 0是小弧 1是大弧)
+          方向(方向参数为0和1 0是逆时针画圆，1是顺时针画圆)
+          终点X坐标 终点Y坐标 (圆形的直径要大于两点之间的距离，也就是起点坐标和终点坐标的距离)-->
+    <!--  当两个半径的长度不一样时就会绘制出来椭圆-->
+    <path d="M600 200 A 100 100 0 0 1 700 300"  fill="none" stroke="red">  </path>
+  </svg>
+  <div class="img">
+    <img src="../新建文件夹 (4)/path.png" alt="">
+    <p>其实path标签是画了两个圆，然后截取了两点之间的一段，弧长表示取长的弧线还是短的弧线，方向表示取哪一个圆的弧线</p>
+  </div>
+  <script src="path.js"></script>
+</body>
+</html>

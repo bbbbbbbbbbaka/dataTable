@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body,
+    html{
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+    .aa{
+     stroke-width: 5;
+    }
+  </style>
+</head>
+<body>
+  <svg version="1.1"
+  width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="aa">
+  
+  <!-- <circle>标签用来画圆形 -->
+  <circle cy="100" cx="100" r="50" fill="transparent" stroke="black" stroke-width="5"></circle><!--fill:背景颜色（transparent为透明）cy&cx:此盒子的中心点到x和y轴的距离，r:定义圆的半径-->
+  <!-- cx&cy是中心点坐标，x&y是基于左上角的坐标 -->
+  <!-- <circle cy="200" cx="200" r="50" style:="fill:transparent stroke:black stroke-width:5"></circle>有些属性也是可以写进style样式里面的 但是像cy r等的属性不能写进style -->
+  
+  <!-- <rect>标签用来画矩形 -->
+  <rect width="200" height="200" fill="red" x="100" y="100" rx="30" ry="50"></rect><!--x&y方块距离左边和上边的距离，和定位的top和left值相似 这里的rx&ry用来调整方块的弧度，只写其中一个值时，另外一个值默认和这个值相等-->
+  
+  <!--<line>标签用来画一条线段-->
+  <line x1="50" y1="50" x2="200" y2="300" stroke="black" stroke-width="5" stroke-opacity="0.5"></line><!--x1&y1用来定义线段的起始点 x2&y2用来定义线段的终点 stroke系列属性用来控制边框的样式但线段只有一个边框 stroke-opacity设置透明度-->
+
+  <!-- 1.<g>标签是一个容器（分组）标签，是用来组合元素的-->
+  <g fill="transparent" stroke="red"  transform="translate(350,350)" class="aa" style="cursor: pointer;"><!--3.由于<g>标签没有cx cy等属性 所以需要通过transfrom来整体移动 <g>标签还可以加id之类的属性-->
+    <circle  r="50" ></circle>
+    <circle  r="70" ></circle>
+    <circle  r="90" ></circle>
+    <!--2.此时画了一个类似靶心的图形 如果此时需要把这个靶心向某个方向移动则只需要修改<g>标签的属性，而不需要每个圆形都修改 而且可以把一些公共的样式都写进<g>标签里面，fill 和stroke是公共样式，但cy cx r 等就不是公共样式，所以写进g标签是无效的因为g标签可以是任何标签的容器而cy cx r等标签只有椭圆圆形才具备-->
+  </g>
+
+  <!--<text>标签用来添加文字-->
+  <circle cy="100" cx="400" r="70" fill="transparent" stroke="black" stroke-width="5"></circle>
+  <text x="400" y="100" text-anchor="middle">SVG</text><!--text-anchor:设置文字的对齐方式,(start:居左 middle:居中 end:居右) 文字默认是基线对齐的，如过想让文字更准确的对齐(请百度)  -->
+
+  <!--<image>标签用来添加图片-->
+    <g>
+      <image x="600" y="100" width="100" height="100" xlink:href="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3439012700,3698536650&fm=26&gp=0.jpg"></image>  <!-- xlink:href属性用来引入图片-->
+      <text x="650" y="150" text-anchor="middle">SVG</text>
+    </g>
+    
+    <!--<polyline>标签用来绘制折线-->
+    <polyline stroke="black" stroke-width="5" points="400 400 500 500 600 450 400 700" fill="none"></polyline><!--points属性每两个属性为一个点 每个属性中间以逗号或空格分隔，绘制出来的图形中间默认是填充的 给fill属性添加none也可以使他隐藏-->
+    
+    <!-- <polygon></polygon>标签用来绘制多边形，他的用法和折线标签一样，区别是他会自动把折线闭合-->
+    <polygon stroke="black" stroke-width="5" points="500 500 600 600 700 550 500 800" fill="none"></polygon>
+</svg>
+</body>
+</html>

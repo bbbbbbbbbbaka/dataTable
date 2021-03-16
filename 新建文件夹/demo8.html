@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body,
+    html{
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <script src="https://d3js.org/d3.v3.js"></script>
+</head>
+<body>
+
+  <script>
+    var data = [10, 20, 50, 30, 80];
+    var width = 500 ,height = 500;
+    var pie = d3.layout.pie().sort(null);
+    var color = d3.scale.category10();
+    var svg  = d3.select('body').append('svg').attr('width',width+100).attr('height',height+100)
+    var arc = d3.svg.arc().outerRadius(0).innerRadius(250)
+    // var arcs = svg.selectAll('path').data(pie(data)).enter().append('path').attr("transform", "translate(" + (outerRadius+30)  + "," + (outerRadius+50) + ")").attr('d',(d,i)=>{return arc(d)})
+    var D=pie(data)
+    console.log(arc(pie(data)));
+    var arcs = svg.selectAll("path")
+        .data(pie(data)) 
+        .enter()
+        .append("path")
+        // 将饼图中心(SVG起点)移至中间
+        .attr("transform", "translate(" + (width/2+50)  + "," + (height/2+50) + ")")
+        .attr('d',(d)=>{console.log(); return arc(d)})
+        // .attr('fill','red').attr('fill',(d,i)=>{return d.data < 20 ? '#0f0' : d.data<30?'#00f':'#f00'})
+  </script>
+</body>
+</html>
