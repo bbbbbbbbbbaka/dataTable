@@ -1,0 +1,160 @@
+class A {
+  constructor(params){
+    this.svg = ...
+    this.lineColor = params.lineColor
+    this.lineWidth = params.lineWidth
+    this.lineColor2 = params.lineColor2
+    this.lineWidth2 = params.lineWidth2
+    this.data = params.data
+    this.onMousemove=this.onMousemove.bind(this)
+    this.render()
+  }
+  render(){
+    this.svg.selectAll('path').data(this.data).join('path')
+      .on('mousemove', this.onMousemove)
+      .style('fill', this.lineColor)
+      .style('width', this.lineWidth)
+  }
+  onMousemove(d){
+    this.svg.selectAll('path')
+      .style('fill', p=> p === d.source || p === d.target?this.lineColor2:this.lineColor)
+      .style('width', p=> p === d.source || p === d.target?this.lineWidth2:this.lineWidth2)
+  }
+}
+
+class B {
+  constructor(params){
+    this.svg = ...
+    this.lineColor = params.lineColor
+    this.lineWidth = params.lineWidth
+    this.lineColor2 = params.lineColor2
+    this.lineWidth2 = params.lineWidth2
+    this.data = params.data
+    this.onMousemove=this.onMousemove.bind(this)
+    this.render()
+  }
+  render(){
+    const {active}=this
+    this.svg.selectAll('path').data(this.data).join('path')
+    .on('mousemove', this.onMousemove)
+      .style('fill', p=> active && (p === active.source || p === active.target)?this.lineColor2:this.lineColor)
+      .style('width', p=> active && (p === active.source || p === active.target)?this.lineWidth2:this.lineWidth2)
+  }
+  onMousemove(d){
+    this.active = d
+    this.render()
+  }
+}
+
+class C {
+  constructor(params){
+    this.svg = ...
+    this.lineColor = params.lineColor
+    this.lineWidth = params.lineWidth
+    this.lineColor2 = params.lineColor2
+    this.lineWidth2 = params.lineWidth2
+    this.data = params.data
+    this.onMousemove=this.onMousemove.bind(this)
+    this.render()
+  }
+  
+  set(params){
+    this.lineColor = params.lineColor
+    this.lineWidth = params.lineWidth
+    this.lineColor2 = params.lineColor2
+    this.lineWidth2 = params.lineWidth2
+    this.data = params.data
+    this.render()
+  }
+  setLineColor(lineColor){
+    this.lineColor = lineColor
+    this.render()
+  }
+  render(){
+    const {active}=this
+    const paths = this.svg.selectAll('path').data(this.data).join('path')
+      .on('mousemove', this.onMousemove)
+
+    paths  
+      .style('fill', this.lineColor)
+      .style('width', this.lineWidth)
+
+    paths.filter(p=>active && (p === active.source || p === active.target))  
+      .style('fill', this.lineColor2)
+      .style('width', this.lineWidth2)
+
+  }
+  onMousemove(d){
+    this.active = d
+    this.render()
+  }
+  onMouseout(d){
+    this.active = null
+    this.render()
+  }
+}
+
+c=new C({
+  lineColor:'#f00'
+})
+
+c.setActive(d)
+
+
+
+let id=0
+class D {
+  constructor(params){
+    this.id = `D-${id++}`
+    this.svg = ...
+    this.svg.attr('id', this.id)
+    this.style = this.svg.append('style')
+    this.lineColor = params.lineColor
+    this.lineWidth = params.lineWidth
+    this.lineColor2 = params.lineColor2
+    this.lineWidth2 = params.lineWidth2
+    this.data = params.data
+    this.onMousemove=this.onMousemove.bind(this)
+    this.render()
+  }
+  
+  set(params){
+    this.lineColor = params.lineColor
+    this.lineWidth = params.lineWidth
+    this.lineColor2 = params.lineColor2
+    this.lineWidth2 = params.lineWidth2
+    this.data = params.data
+    this.render()
+  }
+  setLineColor(lineColor){
+    this.lineColor = lineColor
+    this.render()
+  }
+  render(){
+    this.style.text(`
+#D-${id++} path {
+  fill: ${this.lineColor};
+  width: ${this.lineWidth};
+}
+#D-${id++} path.active {
+  fill: ${this.lineColor2};
+  width: ${this.lineWidth2};
+}
+    `)
+    const {active}=this
+    const paths = this.svg.selectAll('path').data(this.data).join('path')
+      .on('mousemove', this.onMousemove)
+
+    paths.style('fill', d=>d.color)
+
+    paths.classed('active', p=>active && (p === active.source || p === active.target))  
+  }
+  onMousemove(d){
+    this.active = d
+    this.render()
+  }
+  onMouseout(d){
+    this.active = null
+    this.render()
+  }
+}
