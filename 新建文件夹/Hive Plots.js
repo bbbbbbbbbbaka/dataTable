@@ -28,8 +28,17 @@ class Hive {
     this.links = []
     this.active = this
     this.thiz = this
+    this.styles = {
+      color:this.color,
+
+    }
+    this.da = true
+    this.ac = false
+    this.st = false
+    
     
     // this.nodesByType
+
 
     this.svg = d3.select("#chart").append("svg")
       .attr("width", this.width)
@@ -48,6 +57,9 @@ class Hive {
     this.radius = d3.scaleLinear()
       .range([this.innerRadius, this.outerRadius])
 
+    this.style = this.svg.append('style')
+
+
     this.linkMouseover = this.linkMouseover.bind(this)
     this.linkMouseout = this.linkMouseout.bind(this)
     this.nodeMouseover = this.nodeMouseover.bind(this)
@@ -56,103 +68,226 @@ class Hive {
     this.main()
 
   }
+  setstyles(obj){
+    
+  if(obj !== undefined && obj !== null){
+    if('width' in obj && this.width !== obj.width){ this.width = obj.width }
+    // console.log(obj.width)
+    if('height'in obj && this.height !== obj.height){
+      this.height = obj.height
+    }
+    if('innerRadius' in obj && this.innerRadius !== obj.innerRadius ){
+      this.innerRadius = obj.innerRadius
+    }
+    if('outerRadius' in obj &&  this.outerRadius !== obj.outerRadius ){
+      this.outerRadius = obj.outerRadius
+    }
+    if('majorAngle' in obj && this.majorAngle !== obj.majorAngle){
+      this.majorAngle = obj.majorAngle
+    }
+    if('minorAngle' in obj && this.minorAngle !== obj.minorAngle){
+      this.minorAngle = obj.minorAngle
+    }
+    if('color' in obj&& this.color !== obj.color){
+      this.color = obj.color
+    }
+    if('colors' in obj && this.colors !== obj.colors){
+      this.colors = obj.colors
+    }
+    if('lineWidth' in obj && this.lineWidth !== obj.lineWidth){
+      this.lineWidth = obj.lineWidth
+    }
+    if('lineColor' in obj &&  this.lineColor !== obj.lineColor){
+      this.lineColor = obj.lineColor
+    }
+    if('lineFill' in obj && this.lineFill !== obj.lineFill){
+      this.lineFill = obj.lineFill
+    }
+    if('circleStroke' in obj && this.circleStroke !== obj.circleStroke ){
+      this.circleStroke = obj.circleStroke
+    }
+    if('circleStroke2' in obj && this.circleStroke2 !== obj.circleStroke2){
+    this.circleStroke2 = obj.circleStroke2
+    }
+    if('circleStrokeWidth' in obj && this.circleStrokeWidth !== obj.circleStrokeWidth){
+    this.circleStrokeWidth = obj.circleStrokeWidth
+    }
+    if('circleStrokeWidth2' in obj && this.circleStrokeWidth2 !== obj.circleStrokeWidth2){
+    this.circleStrokeWidth2 = obj.circleStrokeWidth2
+    }
+    if('pathColor' in obj && this.pathColor !== obj.pathColor){
+    this.pathColor = obj.pathColor
+    }
+    if('pathColor2' in obj && this.pathColor2 !== obj.pathColor2){
+    this.pathColor2 = obj.pathColor2
+    }
+    if('pathWidth' in obj && this.pathWidth !== obj.pathWidth){
+    this.pathWidth = obj.pathWidth
+    }
+    if('pathWidth2' in obj && this.pathWidth2 !== obj.pathWidth2){
+    this.pathWidth2 = obj.pathWidth2
+    }
+    if('pathFill' in obj && this.pathFill !== obj.pathFill){
+    this.pathFill = obj.pathFill
+    }
+    if('pathStrokeOpacity' in obj && this.pathStrokeOpacity !== obj.pathStrokeOpacity){
+    this.pathStrokeOpacity = obj.pathStrokeOpacity
+    }
+    if('pathStrokeOpacity2' in obj && this.pathStrokeOpacity2 !== obj.pathStrokeOpacity2){
+    this.pathStrokeOpacity2 = obj.pathStrokeOpacity2
+    }
+    
+  
+
+    // this.nodesByType
+    // this.links = []
+    // this.active = this
+    // this.thiz = this
+    this.st = true
+    render()
+    }
+  }
+  setactive(num){
+    if(num!==undefined && num !==null){
+      this.active = num
+      this.ac = true
+      this.render()
+    }
+  }
+  setdata(obj){
+   if(obj !== undefined && obj !== null){
+    if('nodes' in obj && this.nodes !== obj.nodes){
+      this.nodes = obj.nodes
+    }
+    if('nodesByType' in obj && this.nodesByType !== obj.nodesByType){
+      this.nodesByType = obj.nodesByType
+    }
+    if('links' in obj && this.links !== obj.links){
+      this.links = obj.links
+    }
+    this.da = true
+    this.render()
+   }
+  }
 
   render() {
-
+    if(this.da = true){
+      this. st = true
+      this.ac = true
+    }
     // const {active} = this
     // console.log(active,this.active)
     
     //console.log(this);
 
-    //绘制轴
+    
+
+    if(this.da){
+      //绘制轴
     this.lines
-      .attr('class','lines')
-      .selectAll(".axis")
-      .data(this.nodesByType, (d, i) => i)
-      .join((enter) => enter.append('line'))
-      .attr("class", "axis")
-      .attr("transform", d => {
-        return "rotate(" + this.degrees(this.angle(d[0])) + ")";
-      })
-      .attr("x1", this.radius(-2))
-      .attr("x2", d => {
-        return this.radius(d.count + 2);
-      })
-      .style('stroke', this.lineColor)
-      .style('stroke-width', this.lineWidth)
-      .attr('fill', this.lineFill)
+    .attr('class','lines')
+    .selectAll(".axis")
+    .data(this.nodesByType,)
+    .join('line')
+    .attr("class", "axis")
+    .attr("transform", d => {return "rotate(" + this.degrees(this.angle(d[0])) + ")"; })
+    .attr("x1", this.radius(-2))
+    .attr("x2", d => {return this.radius(d.count + 2);})
 
-
-    this.paths
-      .attr('class', 'links')
-      .selectAll('.link')
-      .data(this.links)
-      .join('path')
-      .attr('stroke', this.pathColor)
-      .attr('stroke-width', this.pathWidth)
-      .attr('stroke-opacity', this.pathStrokeOpacity)
-      .attr('fill', this.pathFill)
-      .attr('class', 'link')
-      .attr('d', this.link()
-        .angle(d => {
-          return this.angle(d.type)
-        })
-        .radius(d => {
-          return this.radius(d.node.index)
-        })
-      )
-      .on('mouseover', this.linkMouseover)
-      // .on('mouseover',e=>{return this.linkMouseover(e,this)})
-      .on('mouseout', this.linkMouseout)
-    // .on('mouseover',(e,d)=>{this.svg.selectAll(".link").classed("active", p=> {return p === d; });})
-    // .on('mouseout',(e,d)=>{this.svg.selectAll('.link').classed('active',p=>{return false})})
+  this.paths
+    .attr('class', 'links')
+    .selectAll('.link')
+    .data(this.links)
+    .join('path')
+    .attr('class', 'link')
+    .attr('d', this.link()
+      .angle(d => { return this.angle(d.type)})
+      .radius(d => {return this.radius(d.node.index)})
+    )
+    .on('mouseover', this.linkMouseover)
+    .on('mouseout', this.linkMouseout)
 
 
 
-   this.circles
-      .attr('class', 'nodes')
-      .selectAll('.node')
-      .data(this.nodes)
-      .join('g')
-      .attr('class', 'node')
-      // .style('fill',d=>{  return this.color(d.packageName);})
-      // .style('fill',(d,i)=>{ return this.color()})
-      .style('fill', d => {
-        return this.hue(d)
-      })
-      // .style('fill',d=>{return d.co})
-      .selectAll('circle')
-      .data(d => {
-        return d.connectors
-      })
-      .join('circle')
-      .attr('transform', d => {return 'rotate(' + this.degrees(this.angle(d.type)) + ')'})
-      .attr('cx', d => {return this.radius(d.node.index)})
-      .attr('r', 4)
-      .attr('stroke-width',this.circleStrokeWidth)
-      .attr('stroke', this.circleStroke)
-      .on('mouseover', this.nodeMouseover)
-      .on('mouseout', this.linkMouseout)
-      
-    this.paths.selectAll('path').filter((d,p) =>  { return this.active == d})
-    .attr('stroke-opacity',1)
-      .attr('stroke','red')
-      .attr('stroke-width',2+'px')    
+  this.circles
+    .attr('class', 'nodes')
+    .selectAll('.node')
+    .data(this.nodes)
+    .join('g')
+    .attr('class', 'node')
+    .style('fill', d => {
+      return this.hue(d)
+    })
+    .selectAll('circle')
+    .data(d => {
+      return d.connectors
+    })
+    .join('circle')
+    .attr('transform', d => {return 'rotate(' + this.degrees(this.angle(d.type)) + ')'})
+    .attr('cx', d => {return this.radius(d.node.index)})
+    .attr('r', 4)
+    .attr('class','yuan')
+    .on('mouseover', this.nodeMouseover)
+    .on('mouseout', this.linkMouseout)
+    }
+
+    if(this.st){
+      this.style.text(`
+    .axis{
+      stroke: ${this.lineColor};
+      stroke-width: ${this.lineWidth};
+      fill: ${this.lineFill}
+    }
+    .link{
+      stroke: ${this.pathColor};
+      stroke-width: ${this.pathWidth};
+      stroke-opacity: ${this.pathStrokeOpacity};
+      fill: ${this.pathFill}
+    }
+    .link .active{
+      stroke: ${this.pathColor2};
+      stroke-width: ${this.pathWidth2};
+      stroke-opacity: ${this.pathStrokeOpacity2}
+    }
+    .yuan{
+      stroke: ${this.circleStroke};
+      stroke-width: ${this.circleStrokeWidth}
+    }
+    .yuan .active{
+      stroke: ${this.circleStroke2};
+      stroke-width: ${this.circleStrokeWidth2}
+    }
+  `)
+    }
+    if(this.ac){
+      this.paths.selectAll('.link').classed('active',d =>  {return this.active == d})
+      this.circles.selectAll('.yuan').classed('active',d=>{ return  d === this.active.source || d === this.active.target;})
+      this.paths.selectAll('.link').classed('active',d=>{return d.source === this.active|| d.target === this.active})
+      this.circles.selectAll('.yuan').classed('active',d=>{ return d === this.active})
+    }
+
+    this.da = false
+    this.st = false
+    this.ac = false     
+    // this.paths.selectAll('.link').classed('active',d =>  { return this.active == d})
+    // .attr('stroke-opacity',1)
+    //   .attr('stroke','red')
+    //   .attr('stroke-width',2+'px')    
       // .selectAll(".node circle").classed("active", p=>{ return p === this.active.source || p === this.active.target; });
 
-      // .selectAll("circle").filter((d,p)=>{console.log(1);})
-    this.circles.selectAll('circle').filter((d,p)=>{ return  d === this.active.source || d === this.active.target;})
-      .attr('stroke',this.circleStroke2)
-      .attr('stroke-width',this.circleStrokeWidth2)
+
+    // this.circles.selectAll('.yuan').classed('active',d=>{ return  d === this.active.source || d === this.active.target;})
+      // .attr('stroke',this.circleStroke2)
+      // .attr('stroke-width',this.circleStrokeWidth2)
     
     
-    this.paths.selectAll('path').filter(d=>{return d.source === this.active|| d.target === this.active})
-    .attr('stroke-opacity',this.pathStrokeOpacity2)
-    .attr('stroke',this.pathColor2)
-    .attr('stroke-width',this.pathWidth2) 
-    this.circles.selectAll('circle').filter(d=>{ return d === this.active})
-    .attr('stroke',this.circleStroke2)
-    .attr('stroke-width',this.circleStrokeWidth2)
+    // this.paths.selectAll('.link').classed('active',d=>{return d.source === this.active|| d.target === this.active})
+    // .attr('stroke-opacity',this.pathStrokeOpacity2)
+    // .attr('stroke',this.pathColor2)
+    // .attr('stroke-width',this.pathWidth2) 
+    // this.circles.selectAll('.yuan').classed('active',d=>{ return d === this.active})
+    // .attr('stroke',this.circleStroke2)
+    // .attr('stroke-width',this.circleStrokeWidth2)
     
 
       
@@ -163,8 +298,6 @@ class Hive {
   }
 
   main() {
-    // var nodes = this.nodes
-    // d3.json(this.json).then((nodes) => {
 
     var nodesByName = {}
     // formatNumber = d3.format(',d'),
@@ -206,13 +339,10 @@ class Hive {
       if (node.source && node.target) {
         node.type = node.source.type = 'target-source'
         node.target.type = 'source-target';
-        //  node.co = 'yellow'
       } else if (node.source) {
         node.type = node.source.type = 'source';
-        //  node.co = 'blue'
       } else if (node.target) {
         node.type = node.target.type = 'target'
-        //  node.co = 'green'
       } else {
         node.connectors = [{
           node: node
@@ -262,42 +392,17 @@ class Hive {
 
 
 
-    // })
+    
     this.render()
   }
   linkMouseover(e, d) {
-    //  console.log(this);
-     this.active = d
-    //  console.log(d);
-     
-     this.render()
-    // d3.selectAll('.link').classed('active', function (p) {
-    //   return d === p
-    // })
-    // d3.selectAll('.link').classed('active',function(p){return d === p})
-    // d3.selectAll(".node circle").classed("active", p=>{ return p === d.source || p === d.target; });
-    // d3.select(this).style('stroke','blue').style('stroke-width',3+'px')
-    // d3.select(this)+='.style('+Object.keys(styles[0])+','+Object.values(styles[0])+')'
-    // console.log(typeof Object.keys(this.styles[0]).toString(), Object.values(this.styles[0]).toString() ,t )
-    // d3.select(this).style(Object.keys(this.styles[0]).toString()+','+Object.values(this.styles[0]).toString() )
-    // d3.select(this).style('stroke','blue')
-
+     this.setactive(d)
   }
   linkMouseout(e, d) {
-    //  d3.selectAll('.active').classed('active', p => {return false})
-    this.active = this.thiz
-    
-    this.render()
-    // d3.selectAll('.link').style('stroke','').style('stroke-width','')
-
+    this.setactive(this.thiz)
   }
   nodeMouseover(e, d) {
-    this.active = d
-    this.render()
-    // console.log(d,this);
-    
-    // d3.selectAll(".link").classed("active", p => {return p.source === d || p.target === d;});
-    // d3.select(this).classed("active", true);
+    this.setactive(d)
   }
   randomColor() {
     //16进制随机数生成 颜色值
@@ -448,4 +553,7 @@ d3.json('./hiv.json').then((nodes) => {
     pathStrokeOpacity2:1,
     nodes: nodes
   })
+//  p.set()
+ console.log(p.styles.color);
+
 })
