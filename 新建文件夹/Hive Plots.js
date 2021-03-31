@@ -1,3 +1,7 @@
+
+
+
+
 class Hive {
   constructor(parms) {
     this.width = parms.width
@@ -7,7 +11,8 @@ class Hive {
     this.majorAngle = parms.majorAngle
     this.minorAngle = parms.minorAngle
     this.json = parms.json
-    this.color = parms.color
+    // this.color(parms.color) 
+    this.yanse = parms.yanse
     this.colors = parms.colors
     this.lineWidth = parms.lineWidth
     this.lineColor = parms.lineColor
@@ -26,25 +31,21 @@ class Hive {
     this.nodes = parms.nodes
     this.nodesByType
     this.links = []
-    this.active = this
+    this.active
     this.thiz = this
-    this.styles = {
-      color:this.color,
-
-    }
     this.da = true
     this.ac = false
     this.st = false
-    
-    
+
+    this.formatNumber = d3.format(',d')
+    this.defaultInfo;
+
     // this.nodesByType
-
-
     this.svg = d3.select("#chart").append("svg")
       .attr("width", this.width)
       .attr("height", this.height)
       .append("g")
-      .attr("transform", "translate(" + this.outerRadius * .20 + "," + this.outerRadius * .57 + ")");
+      .attr("transform", "translate(" + this.outerRadius * .30 + "," + this.outerRadius * .6 + ")");
 
     this.lines = this.svg.append('g')
     this.paths = this.svg.append('g')
@@ -57,6 +58,8 @@ class Hive {
     this.radius = d3.scaleLinear()
       .range([this.innerRadius, this.outerRadius])
 
+      // Initialize the info display. 初始化信息显示。
+
     this.style = this.svg.append('style')
 
 
@@ -67,6 +70,16 @@ class Hive {
     // this.color = d3.schemeCategory10 
     this.main()
 
+  }
+  color(d){
+    // console.log(d)
+    if(typeof this.yanse == 'string'){
+      return this.yanse    
+    }else if(Object.prototype.toString.apply(this.yanse) == '[object Array]'){
+       return d.co
+    }else if(Object.prototype.toString.apply(this.yanse) == '[object Object]'){
+       return d.co
+    }
   }
   setstyles(obj){
     
@@ -136,20 +149,14 @@ class Hive {
     if('pathStrokeOpacity2' in obj && this.pathStrokeOpacity2 !== obj.pathStrokeOpacity2){
     this.pathStrokeOpacity2 = obj.pathStrokeOpacity2
     }
-    
   
-
-    // this.nodesByType
-    // this.links = []
-    // this.active = this
-    // this.thiz = this
     this.st = true
     render()
     }
   }
-  setactive(num){
-    if(num!==undefined && num !==null){
-      this.active = num
+  setactive(d){
+    if(d!==undefined && d !==null){
+      this.active = d
       this.ac = true
       this.render()
     }
@@ -169,11 +176,10 @@ class Hive {
     this.render()
    }
   }
-
+  
   render() {
-    if(this.da = true){
-      this. st = true
-      this.ac = true
+    if(this.da == true){
+      this.st = true
     }
     // const {active} = this
     // console.log(active,this.active)
@@ -184,7 +190,7 @@ class Hive {
 
     if(this.da){
       //绘制轴
-    this.lines
+  this.lines
     .attr('class','lines')
     .selectAll(".axis")
     .data(this.nodesByType,)
@@ -207,17 +213,14 @@ class Hive {
     .on('mouseover', this.linkMouseover)
     .on('mouseout', this.linkMouseout)
 
-
-
   this.circles
     .attr('class', 'nodes')
     .selectAll('.node')
     .data(this.nodes)
     .join('g')
     .attr('class', 'node')
-    .style('fill', d => {
-      return this.hue(d)
-    })
+    // .style('fill', d => {return this.hue(d)})
+    .style('fill',d=>{return this.color(d)})
     .selectAll('circle')
     .data(d => {
       return d.connectors
@@ -257,51 +260,42 @@ class Hive {
       stroke: ${this.circleStroke2};
       stroke-width: ${this.circleStrokeWidth2}
     }
-  `)
+     `)
     }
+
     if(this.ac){
-      this.paths.selectAll('.link').classed('active',d =>  {return this.active == d})
-      this.circles.selectAll('.yuan').classed('active',d=>{ return  d === this.active.source || d === this.active.target;})
-      this.paths.selectAll('.link').classed('active',d=>{return d.source === this.active|| d.target === this.active})
-      this.circles.selectAll('.yuan').classed('active',d=>{ return d === this.active})
+      this.paths.selectAll('.link').classed('active',d =>  {
+          if (this.active === d) {
+            return true
+          } else if (d.source === this.active|| d.target === this.active) {
+            return true
+          }
+          return false
+        })
+      this.circles.selectAll('.yuan').classed('active',d=>{
+        if(d === this.active.source || d === this.active.target) {
+          return true;
+        } else if (d === this.active) {
+          return true;
+        }
+        return false
+      })
+      
+      // this.paths.selectAll('.link').classed('active',d=>{return d.source === this.active|| d.target === this.active})
+      // this.circles.selectAll('.yuan').classed('active',d=>{ return d === this.active})
     }
 
     this.da = false
     this.st = false
     this.ac = false     
-    // this.paths.selectAll('.link').classed('active',d =>  { return this.active == d})
-    // .attr('stroke-opacity',1)
-    //   .attr('stroke','red')
-    //   .attr('stroke-width',2+'px')    
-      // .selectAll(".node circle").classed("active", p=>{ return p === this.active.source || p === this.active.target; });
-
-
-    // this.circles.selectAll('.yuan').classed('active',d=>{ return  d === this.active.source || d === this.active.target;})
-      // .attr('stroke',this.circleStroke2)
-      // .attr('stroke-width',this.circleStrokeWidth2)
-    
-    
-    // this.paths.selectAll('.link').classed('active',d=>{return d.source === this.active|| d.target === this.active})
-    // .attr('stroke-opacity',this.pathStrokeOpacity2)
-    // .attr('stroke',this.pathColor2)
-    // .attr('stroke-width',this.pathWidth2) 
-    // this.circles.selectAll('.yuan').classed('active',d=>{ return d === this.active})
-    // .attr('stroke',this.circleStroke2)
-    // .attr('stroke-width',this.circleStrokeWidth2)
-    
-
-      
-    // .style('fill', this.lineColor2)
-    // .style('width', this.lineWidth2
-    // d3.selectAll('.link').classed('active',function(p){return d === p}))
-    // .attr('stroke','red').attr('stroke-width',2+'px').attr('stroke-opacity',1)
+   
   }
 
   main() {
 
-    var nodesByName = {}
-    // formatNumber = d3.format(',d'),
-    // defaultInfo;
+    var nodesByName = {},
+    formatNumber = d3.format(',d'),
+    defaultInfo;
 
     // Construct an index by node name. 通过节点名称构造索引。
     this.nodes.forEach(d => {
@@ -351,6 +345,8 @@ class Hive {
       }
     })
 
+    
+
     this.nodesByType = d3.groups(this.nodes, d => d.type)
       //.data(d=>{return d.type;})//key函数将d 以d.type为类别进行分组(实际为3组)
       //.sortKeys(d3.ascending)//nest.sortKeys（）函数用于按特定顺序（即升序或降序）对键进行排序。d3.ascending表示升序
@@ -362,15 +358,32 @@ class Hive {
 
     // Duplicate the target-source axis as source-target. 将target-source轴复制为source-target
     this.nodesByType.push(['source-target', this.nodesByType[1][1]])
-    if (this.color == true && this.colors !== undefined || this.colors !== null) {
+    if (Object.prototype.toString.apply(this.yanse) == '[object Array]') {
       this.nodesByType.forEach((d, i) => {
-        var ss = this.colors
+        var ss = this.yanse
         d[1].forEach((e, k) => {
 
           e.co = []
           e.co.push(ss[i])
         })
       })
+    }
+    if(Object.prototype.toString.apply(this.yanse) == '[object Object]'){
+      console.log(this.nodes)
+      // this.nodes.forEach((d,i)=>{
+      //   var ss = Object.keys(this.yanse)
+      //   ss.forEach((e,k)=>{
+      //     console.log(ss)
+      //     this.nodes[k].co = ss[k]
+      //   })
+      // })
+      var ss = Object.keys(this.yanse)
+      var bb = Object.values(this.yanse)
+      ss.forEach((d,i)=>{
+        this.nodes[i].co = []
+        this.nodes[i].co.push(bb[i])
+      })
+      
     }
 
     // Compute the rank for each type, with padding between packages. 计算每种类型的等级，并在包之间填充
@@ -389,7 +402,9 @@ class Hive {
     this.radius.domain(d3.extent(this.nodes, d => {
       return d.index
     }));
-
+    console.log(this.nodesByType);
+    console.log(this.nodes)
+    
 
 
     
@@ -399,6 +414,7 @@ class Hive {
      this.setactive(d)
   }
   linkMouseout(e, d) {
+    // d3.select("#info").text(this.defaultInfo);
     this.setactive(this.thiz)
   }
   nodeMouseover(e, d) {
@@ -530,13 +546,16 @@ d3.json('./hiv.json').then((nodes) => {
     width: 960,
     height: 850,
     innerRadius: 40,
-    outerRadius: 640,
+    outerRadius: 620,
     majorAngle: 2 * Math.PI / 3,
     minorAngle: 1 * Math.PI / 12,
     json: './hiv.json',
     father: div,
-    color: true,
-    colors: ['red', 'blue', 'green', 'yellow'],
+    // yanse:'red',
+    // color: false,
+    yanse: ['red', 'blue', 'green', 'yellow'],
+    // yanse:{one:'red',2:'blue',two:'yellow',4:'yellow',5:'yellow',6:'yellow',7:'yellow'},
+    
     lineWidth: 2 + 'px',
     lineColor: 'black',
     lineFill: 'none',
@@ -551,9 +570,12 @@ d3.json('./hiv.json').then((nodes) => {
     pathFill: 'none',
     pathStrokeOpacity: 0.3,
     pathStrokeOpacity2:1,
-    nodes: nodes
+    nodes: nodes,
   })
 //  p.set()
- console.log(p.styles.color);
 
 })
+// console.log(dat)
+// const gui = new dat.GUI();
+// gui.add(controls,'outerRadius',0,0.5)
+
