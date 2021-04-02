@@ -5,14 +5,16 @@
 class Hive {
   constructor(parms) {
     this.father = parms.father
-    // this.width = this.father.clientWidth
-    // this.height = this.father.clientHeight
-    this.width = parms.width
-    this.height = parms.height
+    this.width = this.father.clientWidth
+    this.height = this.father.clientHeight
+    this.majorAngle=2 * Math.PI / 3,
+    this.minorAngle= 1 * Math.PI / 12,
+    // this.width = parms.width
+    // this.height = parms.height
     this.innerRadius = parms.innerRadius
     this.outerRadius = parms.outerRadius
-    this.majorAngle = parms.majorAngle
-    this.minorAngle = parms.minorAngle
+    // this.majorAngle = parms.majorAngle
+    // this.minorAngle = parms.minorAngle
     this.json = parms.json
     // this.color(parms.color) 
     this.yanse = parms.yanse
@@ -31,7 +33,6 @@ class Hive {
     this.pathFill = parms.pathFill
     this.pathStrokeOpacity = parms.pathStrokeOpacity
     this.pathStrokeOpacity2 = parms.pathStrokeOpacity2
-    this. cl= parms.cl
     this.nodes = parms.nodes
     this.nodesByType
     this.links = []
@@ -389,14 +390,16 @@ class Hive {
 
     // Duplicate the target-source axis as source-target. 将target-source轴复制为source-target
     this.nodesByType.push(['source-target', this.nodesByType[1][1]])
-      this.nodesByType.forEach((d, i) => {
-        var ss = ['red','green','blue','yellow']
-        d[1].forEach((e, k) => {
 
-          e.co = []
-          e.co.push(ss[i])
-        })
-      })
+
+    //   this.nodesByType.forEach((d, i) => {
+    //     var ss = ['red','green','blue','yellow']
+    //     d[1].forEach((e, k) => {
+
+    //       e.co = []
+    //       e.co.push(ss[i])
+    //     })
+    //   })
     
 
     // Compute the rank for each type, with padding between packages. 计算每种类型的等级，并在包之间填充
@@ -554,16 +557,17 @@ class Hive {
 var hive = d3.json('./hiv.json').then((nodes) => {
   var div = document.createElement('p')
   div.setAttribute('id', 'chart')
-  div.setAttribute('style','display:inline-block; width:960; height:850; ')
   div.setAttribute('display','inline-block')
+  div.setAttribute('style','display:inline-block; width:960px; height:850px; ')
+
   document.body.appendChild(div)
   var p = new Hive({
-    width: 960,
-    height: 850,
+    // width: 960,
+    // height: 850,
     innerRadius: 40,
     outerRadius: 620,
-    majorAngle: 2 * Math.PI / 3,
-    minorAngle: 1 * Math.PI / 12,
+    // majorAngle: 2 * Math.PI / 3,
+    // minorAngle: 1 * Math.PI / 12,
     father: div,
     yanse:d=>{
      var ab = d3.scaleOrdinal()
@@ -579,7 +583,7 @@ var hive = d3.json('./hiv.json').then((nodes) => {
     circleHoverStroke:'#ff0000',
     circleStrokeWidth:1+'px',
     circleStrokHoverWidth: 3 + 'px',
-    pathColor: d=>{return `rgb(${Math.floor(Math.random()*255)},${Math.floor(Math.random()*255)},0)`},
+    pathColor: d=>{return `rgb(${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)},0)`},
     pathHoverColor:'#ff0000',
     pathWidth: 2 + 'px',
     pathHoverWidth:2+'px',
