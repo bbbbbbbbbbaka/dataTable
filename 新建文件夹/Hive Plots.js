@@ -4,6 +4,9 @@
 
 class Hive {
   constructor(parms) {
+    this.father = parms.father
+    // this.width = this.father.clientWidth
+    // this.height = this.father.clientHeight
     this.width = parms.width
     this.height = parms.height
     this.innerRadius = parms.innerRadius
@@ -18,16 +21,17 @@ class Hive {
     this.lineColor = parms.lineColor
     this.lineFill = parms.lineFill
     this.circleStroke = parms.circleStroke
-    this.circleStroke2 = parms.circleStroke2
+    this.circleHoverStroke = parms.circleHoverStroke
     this.circleStrokeWidth = parms.circleStrokeWidth
-    this.circleStrokeWidth2 = parms.circleStrokeWidth2
+    this.circleStrokHoverWidth = parms.circleStrokHoverWidth
     this.pathColor = parms.pathColor
-    this.pathColor2 = parms.pathColor2
+    this.pathHoverColor = parms.pathHoverColor
     this.pathWidth = parms.pathWidth
-    this.pathWidth2 = parms.pathWidth2
+    this.pathHoverWidth = parms.pathHoverWidth
     this.pathFill = parms.pathFill
     this.pathStrokeOpacity = parms.pathStrokeOpacity
     this.pathStrokeOpacity2 = parms.pathStrokeOpacity2
+    this. cl= parms.cl
     this.nodes = parms.nodes
     this.nodesByType
     this.links = []
@@ -36,16 +40,16 @@ class Hive {
     this.da = true
     this.ac = false
     this.st = false
-
     this.formatNumber = d3.format(',d')
     this.defaultInfo;
-
     // this.nodesByType
     this.svg = d3.select("#chart").append("svg")
-      .attr("width", this.width)
-      .attr("height", this.height)
-      .append("g")
-      .attr("transform", "translate(" + this.outerRadius * .30 + "," + this.outerRadius * .6 + ")");
+    .attr("width", this.width)
+    .attr("height", this.height)
+    .append("g")
+      
+    
+      this.style = this.svg.append('style')
 
     this.lines = this.svg.append('g')
     this.paths = this.svg.append('g')
@@ -56,12 +60,13 @@ class Hive {
       .range([0, this.majorAngle - this.minorAngle, this.majorAngle + this.minorAngle, 2 * this.majorAngle]);
 
     this.radius = d3.scaleLinear()
-      .range([this.innerRadius, this.outerRadius])
+      
 
-      // Initialize the info display. 初始化信息显示。
+    
 
-    this.style = this.svg.append('style')
-
+    
+    // var aa = document.createElement('style')
+    // this.style = document.body.appendChild(aa)
 
     this.linkMouseover = this.linkMouseover.bind(this)
     this.linkMouseout = this.linkMouseout.bind(this)
@@ -70,37 +75,23 @@ class Hive {
     // this.color = d3.schemeCategory10 
     this.main()
 
+      // Initialize the info display. 初始化信息显示。
+    this.info = d3.select("#info")
+      .text(this.defaultInfo = "Showing " + this.formatNumber(this.links.length) + " dependencies among " + this.formatNumber(this.nodes.length) + " classes.");
   }
-  color(d){
-    // console.log(d)
-    if(typeof this.yanse == 'string'){
-      return this.yanse    
-    }else if(Object.prototype.toString.apply(this.yanse) == '[object Array]'){
-       return d.co
-    }else if(Object.prototype.toString.apply(this.yanse) == '[object Object]'){
-       return d.co
-    }
-  }
+  // color(d){
+  //   // console.log(d)
+  //   if(typeof this.yanse == 'string'){
+  //     return this.yanse    
+  //   }else if(Object.prototype.toString.apply(this.yanse) == '[object Array]'){
+  //      return d.co
+  //   }else if(Object.prototype.toString.apply(this.yanse) == '[object Object]'){
+  //      return d.co
+  //   }
+  // }
   setstyles(obj){
-    
   if(obj !== undefined && obj !== null){
-    if('width' in obj && this.width !== obj.width){ this.width = obj.width }
-    // console.log(obj.width)
-    if('height'in obj && this.height !== obj.height){
-      this.height = obj.height
-    }
-    if('innerRadius' in obj && this.innerRadius !== obj.innerRadius ){
-      this.innerRadius = obj.innerRadius
-    }
-    if('outerRadius' in obj &&  this.outerRadius !== obj.outerRadius ){
-      this.outerRadius = obj.outerRadius
-    }
-    if('majorAngle' in obj && this.majorAngle !== obj.majorAngle){
-      this.majorAngle = obj.majorAngle
-    }
-    if('minorAngle' in obj && this.minorAngle !== obj.minorAngle){
-      this.minorAngle = obj.minorAngle
-    }
+    
     if('color' in obj&& this.color !== obj.color){
       this.color = obj.color
     }
@@ -116,29 +107,25 @@ class Hive {
     if('lineFill' in obj && this.lineFill !== obj.lineFill){
       this.lineFill = obj.lineFill
     }
-    if('circleStroke' in obj && this.circleStroke !== obj.circleStroke ){
-      this.circleStroke = obj.circleStroke
-    }
-    if('circleStroke2' in obj && this.circleStroke2 !== obj.circleStroke2){
-    this.circleStroke2 = obj.circleStroke2
+   
+    if('circleHoverStroke' in obj && this.circleHoverStroke !== obj.circleHoverStroke){
+    this.circleHoverStroke = obj.circleHoverStroke
     }
     if('circleStrokeWidth' in obj && this.circleStrokeWidth !== obj.circleStrokeWidth){
     this.circleStrokeWidth = obj.circleStrokeWidth
     }
-    if('circleStrokeWidth2' in obj && this.circleStrokeWidth2 !== obj.circleStrokeWidth2){
-    this.circleStrokeWidth2 = obj.circleStrokeWidth2
+    if('circleStrokHoverWidth' in obj && this.circleStrokHoverWidth !== obj.circleStrokHoverWidth){
+    this.circleStrokHoverWidth = obj.circleStrokHoverWidth
     }
-    if('pathColor' in obj && this.pathColor !== obj.pathColor){
-    this.pathColor = obj.pathColor
-    }
-    if('pathColor2' in obj && this.pathColor2 !== obj.pathColor2){
-    this.pathColor2 = obj.pathColor2
+  
+    if('pathHoverColor' in obj && this.pathHoverColor !== obj.pathHoverColor){
+    this.pathHoverColor = obj.pathHoverColor
     }
     if('pathWidth' in obj && this.pathWidth !== obj.pathWidth){
     this.pathWidth = obj.pathWidth
     }
-    if('pathWidth2' in obj && this.pathWidth2 !== obj.pathWidth2){
-    this.pathWidth2 = obj.pathWidth2
+    if('pathHoverWidth' in obj && this.pathHoverWidth !== obj.pathHoverWidth){
+    this.pathHoverWidth = obj.pathHoverWidth
     }
     if('pathFill' in obj && this.pathFill !== obj.pathFill){
     this.pathFill = obj.pathFill
@@ -149,9 +136,9 @@ class Hive {
     if('pathStrokeOpacity2' in obj && this.pathStrokeOpacity2 !== obj.pathStrokeOpacity2){
     this.pathStrokeOpacity2 = obj.pathStrokeOpacity2
     }
-  
+    
     this.st = true
-    render()
+    this.render()
     }
   }
   setactive(d){
@@ -172,23 +159,60 @@ class Hive {
     if('links' in obj && this.links !== obj.links){
       this.links = obj.links
     }
+    if('width' in obj && this.width !== obj.width){ this.width = obj.width }
+    // console.log(obj.width)
+    if('height'in obj && this.height !== obj.height){
+      this.height = obj.height
+    }
+    if('innerRadius' in obj && this.innerRadius !== obj.innerRadius ){
+      this.innerRadius = obj.innerRadius
+      this.radius = d3.scaleLinear()
+      .range([this.innerRadius, this.outerRadius])
+
+    }
+    if('outerRadius' in obj &&  this.outerRadius !== obj.outerRadius ){
+      this.outerRadius = obj.outerRadius
+      this.radius = d3.scaleLinear()
+      .range([this.innerRadius, this.outerRadius])
+
+    }
+    if('majorAngle' in obj && this.majorAngle !== obj.majorAngle){
+      this.majorAngle = obj.majorAngle
+    }
+    if('minorAngle' in obj && this.minorAngle !== obj.minorAngle){
+      this.minorAngle = obj.minorAngle
+    }
+     if('circleStroke' in obj && this.circleStroke !== obj.circleStroke ){
+      this.circleStroke = obj.circleStroke
+    }
+     if('pathColor' in obj && this.pathColor !== obj.pathColor){
+    this.pathColor = obj.pathColor
+    }
     this.da = true
     this.render()
    }
   }
   
   render() {
+    
     if(this.da == true){
       this.st = true
     }
+    
     // const {active} = this
     // console.log(active,this.active)
     
     //console.log(this);
 
-    
+    // console.log(this.radius())
 
     if(this.da){
+    
+  this.radius.range([this.innerRadius, this.outerRadius]) 
+
+  this.svg
+   .attr("transform", "translate(" + this.outerRadius * .30 + "," + this.outerRadius * .6 + ")");
+
       //绘制轴
   this.lines
     .attr('class','lines')
@@ -206,6 +230,7 @@ class Hive {
     .data(this.links)
     .join('path')
     .attr('class', 'link')
+    .attr('stroke',d=>{return this.pathColor()})
     .attr('d', this.link()
       .angle(d => { return this.angle(d.type)})
       .radius(d => {return this.radius(d.node.index)})
@@ -220,7 +245,8 @@ class Hive {
     .join('g')
     .attr('class', 'node')
     // .style('fill', d => {return this.hue(d)})
-    .style('fill',d=>{return this.color(d)})
+    .style('fill',d=>{return this.yanse(d)})
+    .attr('stroke',d=>{return this.circleStroke(d)})
     .selectAll('circle')
     .data(d => {
       return d.connectors
@@ -242,42 +268,47 @@ class Hive {
       fill: ${this.lineFill}
     }
     .link{
-      stroke: ${this.pathColor};
+    
       stroke-width: ${this.pathWidth};
       stroke-opacity: ${this.pathStrokeOpacity};
       fill: ${this.pathFill}
     }
-    .link .active{
-      stroke: ${this.pathColor2};
-      stroke-width: ${this.pathWidth2};
+    .link.active{
+      stroke: ${this.pathHoverColor};
+      stroke-width: ${this.pathHoverWidth};
       stroke-opacity: ${this.pathStrokeOpacity2}
     }
     .yuan{
-      stroke: ${this.circleStroke};
+      
       stroke-width: ${this.circleStrokeWidth}
     }
-    .yuan .active{
-      stroke: ${this.circleStroke2};
-      stroke-width: ${this.circleStrokeWidth2}
+    .yuan.active{
+      stroke: ${this.circleHoverStroke};
+      stroke-width: ${this.circleStrokHoverWidth}
     }
      `)
     }
-
+    
     if(this.ac){
       this.paths.selectAll('.link').classed('active',d =>  {
           if (this.active === d) {
+           d3.select('#info').text(d.source.node.name + " → " + d.target.node.name);
             return true
           } else if (d.source === this.active|| d.target === this.active) {
             return true
           }
+        //  d3.select('#info').text(this.defaultInfo);
           return false
         })
       this.circles.selectAll('.yuan').classed('active',d=>{
         if(d === this.active.source || d === this.active.target) {
+          
           return true;
         } else if (d === this.active) {
+          d3.select('#info').text(d.node.name);
           return true;
         }
+        // d3.select('#info').text(this.defaultInfo);
         return false
       })
       
@@ -293,9 +324,9 @@ class Hive {
 
   main() {
 
-    var nodesByName = {},
-    formatNumber = d3.format(',d'),
-    defaultInfo;
+    var nodesByName = {}
+    // formatNumber = d3.format(',d'),
+    // defaultInfo;
 
     // Construct an index by node name. 通过节点名称构造索引。
     this.nodes.forEach(d => {
@@ -358,33 +389,15 @@ class Hive {
 
     // Duplicate the target-source axis as source-target. 将target-source轴复制为source-target
     this.nodesByType.push(['source-target', this.nodesByType[1][1]])
-    if (Object.prototype.toString.apply(this.yanse) == '[object Array]') {
       this.nodesByType.forEach((d, i) => {
-        var ss = this.yanse
+        var ss = ['red','green','blue','yellow']
         d[1].forEach((e, k) => {
 
           e.co = []
           e.co.push(ss[i])
         })
       })
-    }
-    if(Object.prototype.toString.apply(this.yanse) == '[object Object]'){
-      console.log(this.nodes)
-      // this.nodes.forEach((d,i)=>{
-      //   var ss = Object.keys(this.yanse)
-      //   ss.forEach((e,k)=>{
-      //     console.log(ss)
-      //     this.nodes[k].co = ss[k]
-      //   })
-      // })
-      var ss = Object.keys(this.yanse)
-      var bb = Object.values(this.yanse)
-      ss.forEach((d,i)=>{
-        this.nodes[i].co = []
-        this.nodes[i].co.push(bb[i])
-      })
-      
-    }
+    
 
     // Compute the rank for each type, with padding between packages. 计算每种类型的等级，并在包之间填充
     this.nodesByType.forEach(type => { //遍历nodesByType
@@ -414,7 +427,7 @@ class Hive {
      this.setactive(d)
   }
   linkMouseout(e, d) {
-    // d3.select("#info").text(this.defaultInfo);
+     d3.select("#info").text(this.defaultInfo);
     this.setactive(this.thiz)
   }
   nodeMouseover(e, d) {
@@ -538,9 +551,11 @@ class Hive {
 }
 
 
-d3.json('./hiv.json').then((nodes) => {
+var hive = d3.json('./hiv.json').then((nodes) => {
   var div = document.createElement('p')
   div.setAttribute('id', 'chart')
+  div.setAttribute('style','display:inline-block; width:960; height:850; ')
+  div.setAttribute('display','inline-block')
   document.body.appendChild(div)
   var p = new Hive({
     width: 960,
@@ -549,33 +564,73 @@ d3.json('./hiv.json').then((nodes) => {
     outerRadius: 620,
     majorAngle: 2 * Math.PI / 3,
     minorAngle: 1 * Math.PI / 12,
-    json: './hiv.json',
     father: div,
-    // yanse:'red',
-    // color: false,
-    yanse: ['red', 'blue', 'green', 'yellow'],
-    // yanse:{one:'red',2:'blue',two:'yellow',4:'yellow',5:'yellow',6:'yellow',7:'yellow'},
+    yanse:d=>{
+     var ab = d3.scaleOrdinal()
+      .domain(["source", "source-target", "target-source", "target"])
+      .range(['red','blue' ,'yellow', 'green']);
+      return ab(d.type)
+    },
     
     lineWidth: 2 + 'px',
-    lineColor: 'black',
+    lineColor: '#000',
     lineFill: 'none',
-    circleStroke: '#000',
-    circleStroke2:'red',
+    circleStroke: d=>{return 'black'},
+    circleHoverStroke:'#ff0000',
     circleStrokeWidth:1+'px',
-    circleStrokeWidth2: 3 + 'px',
-    pathColor: '#999',
-    pathColor2:'red',
+    circleStrokHoverWidth: 3 + 'px',
+    pathColor: d=>{return `rgb(${Math.floor(Math.random()*255)},${Math.floor(Math.random()*255)},0)`},
+    pathHoverColor:'#ff0000',
     pathWidth: 2 + 'px',
-    pathWidth2:3+'px',
+    pathHoverWidth:2+'px',
     pathFill: 'none',
     pathStrokeOpacity: 0.3,
     pathStrokeOpacity2:1,
     nodes: nodes,
   })
-//  p.set()
-
+  const gui = new dat.GUI()
+  gui.add(p,'outerRadius',0,620).onFinishChange(e=>{
+    p.setdata({outerRadius:p.outerRadius})
+  })
+  gui.add(p,'innerRadius',0,40).onFinishChange(e=>{
+    p.setdata({innerRadius:p.innerRadius})
+  })
+  gui.add(p,'lineWidth').onFinishChange(e=>{
+    p.setstyles({'linewidth':p.linewidth})
+  })
+  gui.addColor(p,'lineColor').onChange(e=>{
+    p.setstyles({'lineColor':p.lineColor})
+  })
+  // gui.addColor(p,'pathColor').onFinishChange(e=>{
+  //   p.setstyles({'pathColor':p.pathColor})
+  // })
+  gui.addColor(p,'pathHoverColor').onFinishChange(e=>{
+    p.setstyles({'pathHoverColor':p.pathHoverColor})
+  })
+  gui.add(p,'pathWidth',0,10).onFinishChange(e=>{
+    p.setstyles({'pathWidth':p.pathWidth})
+  })
+  gui.add(p,'pathHoverWidth',10).onFinishChange(e=>{
+    p.setstyles({'pathHoverWidth':p.pathHoverWidth})
+  })
+  gui.add(p,'pathStrokeOpacity',0,1).onChange(e=>{
+    p.setstyles({'pathStrokeOpacity':p.pathStrokeOpacity})
+  })
+  // gui.addColor(p,'circleStroke').onChange(e=>{
+  //   p.setstyles({'circleStroke':p.circleStroke})
+  // })
+  gui.addColor(p,'circleHoverStroke').onFinishChange(e=>{
+    p.setstyles({'circleHoverStroke':p.circleHoverStroke})
+  })
+  gui.add(p,'circleStrokeWidth').onFinishChange(e=>{
+    p.setstyles({'circleStrokeWidth':p.circleStrokeWidth})
+  })
+  gui.add(p,'circleStrokHoverWidth').onFinishChange(e=>{
+    p.setstyles({'circleStrokHoverWidth':p.circleStrokHoverWidth})
+  })
 })
-// console.log(dat)
-// const gui = new dat.GUI();
-// gui.add(controls,'outerRadius',0,0.5)
 
+
+function aa(){
+return arguments[1]+arguments[2]
+}
