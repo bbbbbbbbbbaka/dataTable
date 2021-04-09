@@ -96,9 +96,7 @@ class Hive {
       this.proxy.innerRadius_d = this.height_d*.047
       this.proxy.outerRadius_d = this.width_d*.45
     })
-    
   }
-  
   
   // set(obj){
   //   for(let item in this){
