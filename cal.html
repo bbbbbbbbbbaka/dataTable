@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="calculator.css">
+</head>
+<style>
+  *{
+  margin: 0;
+  padding: 0;
+}
+html,
+body{
+  width: 100%;
+  height: 100%;
+  background-color: #e0e5ed;
+}
+
+.main{
+  position: relative;
+  width: 350px;
+  height: 720px;
+  /* border: 1px solid #ccc; */ 
+  margin: 0 auto;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 8px 8px 16px #bec3c9, -8px -8px 16px #ffffff;
+  border-radius: 15px;
+  /* background-color: rgb(66, 112, 114); */
+}
+.title{
+  width: 100%;
+  font-weight:900;
+  font-size: 20px;
+  text-align: center;
+  text-shadow: rgb(46, 46, 46) 4px 2px 3px;
+  color: rgb(252, 107, 10);
+  padding-top: 50px;
+}
+.content{
+  width: calc(100%-30px);
+  height: 50px;
+  font-size: 40px;
+  margin: 100px 15px 0 15px;
+  text-align: right;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: inset 1px 0px 5px rgb(17 17 17);
+}
+.key{
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content:space-between; */
+  width: 100%;
+  height: 414px;
+  margin-top: 80px;
+}
+.key .btn,
+.key .btn1,
+.key .result{
+  /* flex-grow: 1; */
+  margin: 0 13.75px;
+  text-align: center;
+  width: 60px;
+  height: 60px;
+  border: none;
+  outline: none;
+  border-radius: 50% ;
+  background: linear-gradient(145deg, #f0f5fe, #caced5);
+  box-shadow: 8px 8px 16px #bec3c9, -8px -8px 16px #ffffff;
+}
+.key .btn:hover{
+  background: linear-gradient(145deg, #caced5,#f0f5fe);
+}
+.key .btn1:hover{
+  background: linear-gradient(145deg, #caced5,#f0f5fe);
+}
+.key .result:hover{
+  background: linear-gradient(145deg, #caced5,#f0f5fe);
+}
+.key .btn0{
+  width: 147px;
+  height: 60px;
+  border-radius: 5%;
+}
+
+</style>
+
+<body>
+
+  <script>
+    class calculator {
+  constructor(parms) {
+      this.btn1 = this.myCreateElement('input', { type: 'button', class: 'btn1', value: 'AC' }),
+      this.btn2 = this.myCreateElement('input', { type: 'button', class: 'btn1', value: 'DEL' }),
+      this.btn3 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '%' }),
+      this.btn4 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '+' }),
+      this.btn5 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '7' }),
+      this.btn6 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '8' }),
+      this.btn7 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '9' }),
+      this.btn8 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '-' }),
+      this.btn9 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '4' }),
+      this.btn10 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '5' }),
+      this.btn11 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '6' }),
+      this.btn12 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '*' }),
+      this.btn13 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '1' }),
+      this.btn14 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '2' }),
+      this.btn15 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '3' }),
+      this.btn16 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '/' }),
+      this.btn17 = this.myCreateElement('input', { type: 'button', class: 'btn btn0', value: '0' }),
+      this.btn18 = this.myCreateElement('input', { type: 'button', class: 'btn', value: '.' }),
+      this.btn19 = this.myCreateElement('input', { type: 'button', class: 'result', value: '=' }),
+      this.key = this.myCreateElement('div', { class: 'key' }, [this.btn1, this.btn2, this.btn3, this.btn4, this.btn5, this.btn6, this.btn7, this.btn8, this.btn9, this.btn10, this.btn11, this.btn12, this.btn13, this.btn14, this.btn15, this.btn16, this.btn17, this.btn18, this.btn19]),
+      this.content = this.myCreateElement('div', { class: 'content' }),
+      this.title = this.myCreateElement('div', { class: 'title' }, ['CALCULATOR']),
+      this.main = this.myCreateElement('div', { class: 'main' }, [
+        this.title,
+        this.content,
+        this.key,
+      ])
+    document.body.appendChild(this.main)
+    this.digitalAll = document.querySelectorAll('.btn')
+    this.digital()
+    return this.main
+  }
+
+  digital() { 
+    this.digitalAll.forEach(item => {
+      item.addEventListener('click', e => {
+        if( this.content.innerHTML == '0' && item.value == '.'){
+          this.content.innerHTML = '0'
+        }else 
+        if(this.content.innerHTML == '0'){
+          this.content.innerHTML ='';
+        }
+        this.content.innerHTML += item.value 
+      })
+    })
+    this.btn1.addEventListener('click', e => {
+      this.content.innerText = '0'
+    })
+    this.btn2.addEventListener('click',e=>{
+      this.content.innerHTML = this.content.innerHTML.substr(0,this.content.innerHTML.length-1)
+      
+    })
+    this.btn19.addEventListener('click',e=>{
+      this.content.innerHTML = eval(this.content.innerHTML)
+    })
+  }
+
+  myCreateElement(dom, arr, son) {
+    var div = document.createElement(dom)
+    var on = /^on/
+
+    if (arr !== null && arr !== undefined) {
+      Object.keys(arr).forEach((k, index) => {
+        console.log()
+        if (on.test(k)) {
+          div.addEventListener(k.substring(2, k.length + 1), (e) => {
+            console.log(parseInt(arr[k] + '()'))
+          })
+        } else {
+          div.setAttribute(k, arr[k])
+        }
+      })
+    }
+    if ((son !== null) & (son !== undefined)) {
+      son.forEach((c, index) => {
+        if (typeof c === 'string') {
+          var text = document.createTextNode(c)
+          text.data = c
+          div.appendChild(text)
+        } else {
+          div.appendChild(c)
+        }
+      })
+    }
+    return div
+  }
+}
+
+var n = new calculator({})
+document.body.appendChild(n)
+
+var b =/^\d+(\.*\d{0,2})([+*/-]\d+(\.*\d{0,2}))+$/
+    console.log(b.test('1+2-1'))
+  </script>
+</body>
+
+</html>
