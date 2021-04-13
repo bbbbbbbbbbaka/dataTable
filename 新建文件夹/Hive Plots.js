@@ -24,11 +24,11 @@ class Hive {
     // this.majorAngle = parms.majorAngle
     // this.minorAngle = parms.minorAngle
     // this.color(parms.color) 
-    this.nodeColor = parms.nodeColor
+    this.circleColor = parms.circleColor
     this.lineWidth = parms.lineWidth
     this.lineColor = parms.lineColor
     this.lineFill = parms.lineFill
-    this.nodeStrokeColor = parms.nodeStrokeColor
+    this.circleStrokeColor = parms.circleStrokeColor
     this.circleHoverStroke = parms.circleHoverStroke
     this.circleStrokeWidth = parms.circleStrokeWidth
     this.circleStrokHoverWidth = parms.circleStrokHoverWidth
@@ -76,20 +76,8 @@ class Hive {
         return prop
       },
       set: (target, prop, value) => {
-        
-      //   if (this.prop !== value) {
-      //     console.log(prop)
-      //     target[prop] = value
-      //     // this.da = true
-      //    if(prop === 'active'){
-      //      this.ac = true
-      //    }
-      //     this.render()
-      //   // console.log(target[prop],prop,value)
-      //   // target.set({prop:value})
-      //   return true
-      //  }
       target.set({[prop]:value})
+      console.log(this)
       return true
       },
       
@@ -112,7 +100,6 @@ class Hive {
   
   set(obj){
     for(let item in obj){
-      // console.log(item in this,item,this)
        if(item in this){
          if(this[item] === obj[item]){
            continue;
@@ -146,7 +133,7 @@ class Hive {
             case 'links':
               this.da = true;
               break;  
-            case 'nodeColor':
+            case 'circleColor':
               this.da = true;
               break;
             case 'lineWidth':
@@ -158,7 +145,7 @@ class Hive {
             case 'lineFill':
               this.da = true;
               break;
-            case 'nodeStrokeColor':
+            case 'circleStrokeColor':
               this.da = true;
               break;
             case 'circleStrokeWdith':
@@ -255,8 +242,8 @@ class Hive {
         .data(this.nodes)
         .join('g')
         .attr('class', 'node')
-        .style('fill', d => {if(typeof this.nodeColor === 'function')return this.nodeColor(d);else return this.nodeColor})
-        .style('stroke', d => {if(typeof this.nodeStrokeColor === 'function')return this.nodeStrokeColor(); else return this.nodeStrokeColor})
+        .style('fill', d => {if(typeof this.circleColor === 'function')return this.circleColor(d);else return this.circleColor})
+        .style('stroke', d => {if(typeof this.circleStrokeColor === 'function')return this.circleStrokeColor(); else return this.circleStrokeColor})
         .selectAll('circle')
         .data(d => {return d.connectors})
         .join('circle')
@@ -349,6 +336,7 @@ class Hive {
           node: source,
           degree: 0
         });
+        
         if (!target.target) target.connectors.push(target.target = {
           node: target,
           degree: 0
@@ -532,7 +520,7 @@ class Hive {
 var ab = d3.scaleOrdinal()
         .domain(["source", "source-target", "target-source", "target"])
         .range(['red', 'blue', 'yellow', 'green']);
-        
+
 var hive = d3.json('./hiv.json').then((nodes) => {
   var div = document.createElement('p')
   //div.setAttribute('id', 'chart')
@@ -548,15 +536,11 @@ var hive = d3.json('./hiv.json').then((nodes) => {
     // majorAngle: 2 * Math.PI / 3,
     // minorAngle: 1 * Math.PI / 12,
     father: div,
-    nodeColor: (d) => {
-      
-      return ab(d.type)
-    },
-
+    circleColor: (d) => { return ab(d.type) },
     lineWidth: d=>{return 1 },
     lineColor: d=>{return '#000'},
     lineFill:d=>{return 'none'},
-    nodeStrokeColor: d => {return 'black'},
+    circleStrokeColor: d => {return 'red'},
     circleHoverStroke: '#ff0000',
     circleStrokeWidth: d=>{return 1 },
     circleStrokHoverWidth: 3,
@@ -570,6 +554,7 @@ var hive = d3.json('./hiv.json').then((nodes) => {
     nodes: nodes,
   })
   // console.log(p.lineWidth = 10)
+  p.circleStrokeColor = 'black'
   
   // p.set({lineWidth:d=>{return 10}, pathWidth:d=>{return 5}})
   // console.log(p.innerRadius= 300)
@@ -621,3 +606,4 @@ var hive = d3.json('./hiv.json').then((nodes) => {
   // })
   }
 })
+

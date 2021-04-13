@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script type="text/javascript" src="https://d3js.org/d3.v6.js"></script>
+</head>
+<body>
+    <div id="chart"></div>
+  <script>
+
+    class Sporal{
+      constructor(parms){
+        this.width = parms.width
+        this.height = parms.height
+        this.start = parms.start
+        this.end =parms.end
+        this.numSpirals = parms.numSpirals
+        this.margin = parms.margin
+         // used to assign nodes color by group用于按组分配节点颜色
+        this.color = parms.color
+        this.theta =  r=> {return this.numSpirals * Math.PI * r;},
+        this.r = d3.min([this.width, this.height]) / 2 - 40;
+        this.points = d3.range(this.start, this.end + 0.001, (this.end - this.start) / 1000);
+        this.da = true;
+        this.st = false;
+        this.ac = false;
+        this.ma = true
+        // add date labels 添加日期标签
+        this.tF = d3.timeFormat("%b %Y")
+        this.firstInMonth = {};
+
+        this.radius = d3.scaleLinear()
+          .domain([this.start, this.end])
+          .range([40, this.r]);
+        
+        this.spiral = d3.radialLine()
+          .curve(d3.curveCardinal)
+          .angle(this.theta)
+          .radius(this.radius);
+
+        this.svg = d3.select("#chart").append("svg")
+        this.style = this.svg.append('style')
+        this.svgg = this.svg
+          .append('g')
+        
+        this.path = this.svgg.append("path")    
+          this.N = 365
+          this.someData = [];
+      
+        this.tooltip = d3.select("#chart")
+          .append('div')
+          .attr('class', 'tooltip');
+        this.tooltip.append('div')
+          .attr('class', 'date');
+        this.tooltip.append('div')
+          .attr('class', 'value');
+       
+
+        for (var i = 0; i <this.N; i++) {
+          var currentDate = new Date();
+          currentDate.setDate(currentDate.getDate() + i);
+          this.someData.push({
+            date: currentDate,
+            value: Math.random(),
+            group: currentDate.getMonth()
+          });
+        }
+          
+        // yScale for the bar height   条高的比例
+        this.yScale = d3.scaleLinear()
+          .domain([0, d3.max(this.someData, d=>{
+            return d.value;
+          })])
+          .range([0, (this.r / this.numSpirals) - 30]);
+        this.render()
+        
+        this.proxy = new Proxy(this,{
+          get:(target,prop)=>{
+            return prop
+          },
+          set:(target,prop,value)=>{
+              this[prop] = value
+              this.da = true
+              this.render()
+              return true
+          }
+        })
+        // this.proxy.width = 600
+        return this.proxy
+      }
+
+      render(){
+        if(this.da){
+          this.st = true
+        }
+        if(this.da){
+          var tooltip = this.tooltip
+          this.svg
+          .attr("width",this.width + this.margin.right + this.margin.left)
+          .attr("height", this.height + this.margin.left + this.margin.right)
+          
+          this.svgg
+            .attr("transform", "translate(" + this.width / 2 + "," + this.height / 2 + ")");
+
+          this.path
+            .datum(this.points)
+            .attr("id", "spiral")
+            .attr("d", this.spiral)
+            .style("fill", "none")
+            .style("stroke", "steelblue");
+
+          this.spiralLength = this.path.node().getTotalLength()
+          this.barWidth = (this.spiralLength / this.N) - 1;
+          this.timeScale = d3.scaleTime()
+          .domain(d3.extent(this.someData, d=>{
+            return d.date;
+          }))
+          .range([0, this.spiralLength]);
+
+          this.svgg.selectAll("rect")
+            .data(this.someData)
+            .join('rect')
+            .attr('class','rectd')
+            .attr("x", (d,i)=>{ 
+            var linePer = this.timeScale(d.date),
+              posOnLine = this.path.node().getPointAtLength(linePer),
+              angleOnLine = this.path.node().getPointAtLength(linePer - this.barWidth);
+            d.linePer = linePer; // % distance are on the spiral 每个柱形条的距离
+            d.x = posOnLine.x; // x postion on the spiral 在螺旋上的位置 x
+            d.y = posOnLine.y; // y position on the spiral 在螺旋上的位置 y
+          
+            d.a = (Math.atan2(angleOnLine.y, angleOnLine.x) * 180 / Math.PI) - 90; //angle at the spiral position 条的位置的角度
+            return d.x;
+          })
+          .attr("y", d=>{
+            return d.y;
+          })
+          .attr("width", d=>{
+            return this.barWidth;
+          })
+          .attr("height", d=>{
+            return this.yScale(d.value);
+          })
+          .style("fill", d=>{return this.color(d.group);})
+          .style("stroke", "none")
+          .attr("transform", d=>{
+            return "rotate(" + d.a + "," + d.x  + "," + d.y + ")"; // rotate the bar 旋转
+          });
+        
+
+          
+        this.svgg.selectAll("text")
+          .data(this.someData)
+          .join('text')
+          .attr('class','textd')
+          .attr("dy", 10)
+          .style("text-anchor", "start")
+          .style("font", "10px arial")
+          .append("textPath")
+          // only add for the first of each month 仅在每个月的第一天添加
+          .filter(d=>{
+            var sd = this.tF(d.date);
+            if (!this.firstInMonth[sd]){
+              this.firstInMonth[sd] = 1;
+              return true;
+            }
+            return false;
+          })
+          .text(d=>{
+            return this.tF(d.date);
+          })
+          // place text along spiral沿螺旋放置文本
+          .attr("xlink:href", "#spiral")
+          .style("fill", "grey")
+          .attr("startOffset", d=>{
+            return ((d.linePer / this.spiralLength) * 100) + "%";
+            })
+        
+        this.svgg.selectAll("rect")
+          .on('mouseover',mouseover)
+          .on('mousemove',mousemove)
+          .on('mouseout',this.mouseout)
+         
+      }
+        
+        if(this.st){
+          this.style.text(`
+            #spiral{
+              fill: ${'none'};
+              stroke: ${'red'};
+            }
+            .rectd{
+              fill: ${'skyblue'};
+              stroke: ${'none'};
+              stroke-width: ${2} ${'px'}
+            }
+            .textd{
+              text-anchor: ${'start'};
+              font: ${10} ${'px'} ${'arial'};
+            }
+          `)
+        }
+
+        function mouseover(e,d){
+            tooltip.select('.date').html("Date: <b>" + d.date.toDateString() + "</b>");
+              tooltip.select('.value').html("Value: <b>" + Math.round(d.value*100)/100 + "<b>");
+              d3.select(this)
+              .style("fill","#FFFFFF")
+              .style("stroke","#000000")
+              .style("stroke-width","2px");
+
+              tooltip.style('display', 'block');
+              tooltip.style('opacity',2);
+
+          }
+          function mousemove(e,d){
+            tooltip.style('top', (e.layerY + 10) + 'px')
+                .style('left', (e.layerX - 25) + 'px');
+          }
+            this.mouseout = (e,d)=>{
+            d3.selectAll("rect")
+                .style("fill", d=>{ return this.color(d.group);})
+                .style("stroke", "none")
+
+                tooltip.style('display', 'none');
+                tooltip.style('opacity',0);
+          }
+          
+          this.da = false
+          this.st = false
+          this.ac = false
+         
+    }
+
+    linkmuosemove(e,d){
+      tooltip.style('top', (e.layerY + 10) + 'px')
+        .style('left', (e.layerX - 25) + 'px');
+    }
+    linkmouseout(e,d){
+
+    }
+      
+  }
+
+      
+    var p = new Sporal({
+      width : 500,
+      height : 500,
+      start : 0,
+      end : 2.25,
+      numSpirals : 3,
+      margin : {top:50,bottom:50,left:50,right:50},
+      color : d3.scaleOrdinal(d3.schemeCategory10),
+      pathStroke:'steeblue',
+      pathFill:'none',
+      rectStroke:'none',
+      rectFill:d=>{d.group},
+      textAnchor:'start',
+      textFont:10+'px'+' '+'airal',
+    })
+    p.width = 700
+    p.height = 700
+    
+  
+
+
+    </script>
+</body>
+</html
