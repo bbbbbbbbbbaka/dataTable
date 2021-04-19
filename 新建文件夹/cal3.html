@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  class ListNode{
+    constructor(data){
+      this.data = data
+      this.next = null
+      this.prev = null
+    }
+  }
+  class linkedList{
+    constructor(head = null){
+      this.head = head
+    }
+    size(){
+      let count = 0;
+      let node = this.head;
+      while(node){
+        count++;
+        node = node.next
+      }
+      return count
+    }
+    getList(){
+      let lastNode = this.head;
+      if(lastNode){
+        while(lastNode.next){
+          lastNode = lastNode.next
+        }
+      }
+      return lastNode
+    }
+  }
+  let node1 = new ListNode(2)
+  let node2 = new ListNode(5)
+  let node3 = new ListNode(6)
+  node1.next = node2
+  node2.next = node3
+  let list = new linkedList(node1)
+  console.log(list.size())
+  console.log(list.getList())
+  console.log(list.head)
+  class Node{
+    constructor(data){
+      this.data = data//需要添加到节点上面的数据
+      this.next = null//引用下一个节点
+      this.prev = null//引用上一个节点
+    }
+  }
+  class DoublyLinkedList{
+    constructor(){
+      this.head = null//列表的第一个节点
+      this.tail = null;//列表的最后一个节点
+      this.length = null//列表得到长度
+    }
+    lastAppend(data){//向链表最后添加一个节点
+      const node = new Node(data)
+      if(!this.head){
+        this.head = node
+        this.tail = node
+      }else{
+        node.prev = this.tail
+        this.tail.next = node;
+        this.tail = node
+      }
+      this.length++
+    }
+    lastDelete(){//删除链表的最后一个节点
+      if(!this.head)  throw '此链表为空'
+      
+      const prevNode = this.tail.prev
+      if(!prevNode){//表示如果最后一个节点的前一个节点为假的话，就代表这个链表只有一个节点
+        this.head = null
+        this.tail = null
+      }else{
+        prevNode.next = null
+        this.tail = prevNode
+      }
+      this.length--
+    }
+    appendBefore(data){//在链表的最前面添加一个节点
+      const node = new Node(data)
+      if(!this.head){
+        this.head = node
+        this.tail = node
+      }else{
+        this.head.prev = node
+        node.next = this.head
+        this.head = node
+      }
+      this.length++
+    }
+    deleteBefore(){//删除链表最前面的节点
+      if(!this.head) throw '此链表为空'
+      const nextNode = this.head.next
+      if(!nextNode){
+        this.head = null
+        this.tail = null
+      }else{
+        nextNode.prev = null
+        this.head = nextNode
+      }
+      this.length--
+    }
+    inster(index,data){//插入指定节点的后面
+      const node = new Node(data)
+      let cur = 0
+      let current = this.head
+      while(current){
+        if(this.length === 0 || index === this.length){
+          this.lastAppend(data)
+          return
+        } else if(index<=0 || index>this.length){
+          throw '您的输入有误'
+        }else if(cur === index){
+          node.next = current
+          node.prev = current.prev
+          current.prev.next = node
+          current.prev = node
+          this.length++
+          return 
+        }
+        current = current.next
+        cur++
+      }
+      
+    }
+    toArray(){//打印节点
+      let current = this.head,
+      results = []
+      while(current){
+        results.push(current.data)
+        current = current.next
+      }
+      return results
+    }
+    chainLength(){
+      return this.length
+    }
+
+
+  }
+  const link = new DoublyLinkedList()
+  link.lastAppend('hello')
+  link.lastAppend('world')
+  link.lastAppend('nihao')
+  link.lastDelete()
+  link.appendBefore('super')
+  link.deleteBefore()
+  link.inster(1,'at')
+  console.log(link.toArray())
+  console.log(link.chainLength())
+  console.log(link)
+</script>
+</html>
