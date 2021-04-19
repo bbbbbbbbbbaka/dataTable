@@ -132,9 +132,22 @@
         }
         current = current.next
         cur++
-      }
-      
+      }   
     }
+    
+    indexOf(data){//通过值寻找节点位置
+      let cur = 0
+      let current = this.head
+      while(cur<this.length){
+        cur++
+        if(data == current.data){
+          return cur
+        }
+        current = current.next
+      }
+
+    }
+
     toArray(){//打印节点
       let current = this.head,
       results = []
@@ -160,6 +173,7 @@
   link.inster(1,'at')
   console.log(link.toArray())
   console.log(link.chainLength())
+  console.log(link.indexOf('world'))
   console.log(link)
 </script>
 </html>
