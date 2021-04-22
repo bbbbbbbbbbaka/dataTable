@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    class Node{
+      constructor(option,children){
+        this.option = option
+        this.children = children
+      }
+      calc(){
+        if(typeof this.children[1] !== 'number'){
+          switch(this.option){
+            case '+':
+              return this.children[0]+this.children[1].calc()
+            case '-':
+              return this.children[0]-this.children[1].calc()
+            case '*':
+              return this.children[0]*this.children[1].calc()
+            case '/':
+              return this.children[0]/this.children[1].calc();
+          }       
+        }
+        if(typeof this.children[0] ==='number' && typeof this.children[1] === 'number'){
+           switch(this.option){
+            case '+':
+               return this.children[0]+this.children[1]
+            case '-':
+               return this.children[0]-this.children[1]
+            case '*':
+               return this.children[0]*this.children[1]
+            case '/':
+               return this.children[0]/this.children[1]
+          }      
+        }
+      }
+      toString(){
+        let tr = []
+        tr.push(this.option)
+        if(typeof this.children !== 'number'){
+          
+          tr.push(this.children[0],this.children[1].toString())
+        }else{
+          
+          tr.push(this.children)
+        }
+        return tr
+      }
+    }
+    class Delect{
+      constructor(expressionn){
+        this.symbol = ['+','-','*','/','(',')']
+        this.re = /\d/
+        this.tokens = []
+        this.chars = expressionn.trim().split('')
+        console.log(this.chars)
+        this.token = ''
+        this.chars.forEach(c=>{
+          if(this.re.test(c)){
+            this.token += c
+          } else if (c == ' ' && token) {
+          console.log(c)
+            this.tokens.push(this.token)
+            this.token = ''
+          } else if(this.symbol.includes(c)){
+              if(this.token){
+                this.tokens.push(this.token)
+                this.token = ''
+              }
+              this.tokens.push(c)
+            }
+        })
+        if (this.token) {
+            this.tokens.push(this.token)
+            }
+            console.log(this.tokens)
+            return this.tokens
+      }
+    }
+    let tree = new Node('-',[1,new Node('+',[1,new Node('*',[6,3])])])
+    console.log(tree,tree.calc(),tree.toString())
+    console.assert( new Node('-',[1,new Node('+',[1,new Node('*',[6,3])])]).calc() === -18 )
+    console.assert(new Node('+',[1,1]).calc() === 2)
+    console.assert(new Node('*',[8,new Node('-',[8,5])]).calc()===24)
+    let delect = new Delect('30+5-2+5')
+    let ccc = /(\d+[+-/*]\d+)+/
+    console.log(ccc.test('30+5-2+5'))
+    </script>
+    
+</body>
+</html>
