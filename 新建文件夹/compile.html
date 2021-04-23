@@ -88,8 +88,81 @@
     console.assert(new Node('+',[1,1]).calc() === 2)
     console.assert(new Node('*',[8,new Node('-',[8,5])]).calc()===24)
     let delect = new Delect('30+5-2+5')
-    let ccc = /(\d+[+-/*]\d+)+/
+    let ccc = /(\d+[+-/*]\d+)/
     console.log(ccc.test('30+5-2+5'))
+    //var arr =  ['30','+','5','-','2','+','5']'30 5 + 2 -5 +'
+    console.log(new Node('+',[5,new Node('-',[2,new Node('+',[30,5])])]).calc())
+    delect.reverse()
+    console.log(ccc.exec('3+5-2+5'))
+    function fn(arr){
+      let cur = Math.floor(arr.length/2)
+      let node = undefined;
+      let left =  []
+      let right = []
+      for(let i = 0;i<cur;i++){
+        left.push(arr[i])
+      }
+      for(let i = cur+1; i<arr.length;i++){
+        right.push(arr[i])
+      }
+      console.log(left,right)
+    }
+    fn(delect)
+    function nodeLeft(arr){
+      let index = arr.length/3
+      let item =[]
+      if(typeof arr === 'number'){
+        return arr
+      }else{
+        for(let i = 0; i<index;i++){
+          item.push({})
+          // item[i].
+        }
+      }
+    }
+    
+    class Zhan1{
+      constructor(){
+        this.item =[]
+      }
+      push(element){
+        this.item.push(element)
+      }
+      pop(){
+        return this.item.pop()
+      }
+    }
+    class Zhan2{
+      constructor(){
+        this.item =[]
+      }
+      push(element){
+        this.item.push(element)
+      }
+      pop(){
+        return this.item.pop()
+      }
+    }
+    let zhan1 = new Zhan1()
+    let zhan2 = new Zhan2()
+    delect.forEach((item,index)=>{
+      if(['+','-','*','/','(',')'].includes(item)){
+        zhan2.push(item)
+      }else{
+        zhan1.push(item)
+      }
+    })
+     console.log(zhan1.item,zhan2.item)
+    function tr(){
+       
+      if(zhan1.item.length === 2){
+       return new Node (zhan2.pop(),[zhan1.pop(),zhan1.pop()])
+      }else{
+      return new Node(zhan2.pop(),[zhan1.pop(),tr()])
+      }
+    }
+    
+    console.log(tr())
     </script>
     
 </body>
