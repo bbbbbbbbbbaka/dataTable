@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    class Node{
+      constructor(option,children){
+        this.option = option
+        this.children = children
+      }
+      calc(){
+        let a 
+        let b 
+       
+
+
+        switch(this.option){
+          case '+':return a+b
+        }
+        if(typeof this.children[1] !== 'number' && typeof this.children[0] === 'number'){
+          switch(this.option){
+            case '+':
+              return this.children[0]+this.children[1].calc()
+            case '-':
+              return this.children[0]-this.children[1].calc()
+            case '*':
+              return this.children[0]*this.children[1].calc()
+            case '/':
+              return this.children[0]/this.children[1].calc()
+          }       
+        }
+        if(typeof this.children[0] !== 'number' && this.children[1] !== 'number'){
+          switch(this.option){
+            case '+':
+              return this.children[0].calc()+this.children[1].calc()
+            case '-':
+              return this.children[0].calc()-this.children[1].calc()
+            case '*':
+              return this.children[0].calc()*this.children[1].calc()
+            case '/':
+              return this.children[0].calc()/this.children[1].calc()
+          }  
+        }
+        if(typeof this.children[0] ==='number' && typeof this.children[1] === 'number'){
+           switch(this.option){
+            case '+':
+               return this.children[0]+this.children[1]
+            case '-':
+               return this.children[0]-this.children[1]
+            case '*':
+               return this.children[0]*this.children[1]
+            case '/':
+               return this.children[0]/this.children[1]
+          }      
+        }
+       
+        if(typeof this.children[0] === 'number'){
+          a = this.children[0] 
+        }else{
+          a = this.children[0].clac()
+        }
+
+        if(typeof this.children[1] === 'number'){
+          b = this.children[0]
+          if(b === 0){
+            throw '除数不能为0'
+          }
+        }else{
+          b = this.children[1].calc()
+        }
+
+        switch(this.option){
+          case '+':
+           return a+b;
+          case '-':
+           return a-b;
+          case '*':
+           return a*b;
+          case '/':
+           return a/b;
+          default:
+            throw '您的表达式有误'
+        }
+      }
+      // toString(){
+      //   let tr = []
+      //   tr.push(this.option)
+      //   if(typeof this.children !== 'number'){
+      //     tr.push(this.children[0],this.children[1].toString())
+      //   }else{
+      //     tr.push(this.children)
+      //   }
+      //   return tr
+      // }
+      toString(){
+
+      }
+
+    }
+    class Delect{
+      constructor(expressionn){
+        this.symbol = ['+','-','*','/','(',')']
+        this.re = /\d/
+        this.tokens = []
+        this.chars = expressionn.trim().split('')
+        console.log(this.chars)
+        this.token = ''
+        this.chars.forEach(c=>{
+          if(this.re.test(c)){
+            this.token += c
+          } else if (c == ' ' && token) {
+          console.log(c)
+            this.tokens.push(this.token)
+            this.token = ''
+          } else if(this.symbol.includes(c)){
+              if(this.token){
+                this.tokens.push(this.token)
+                this.token = ''
+              }
+              this.tokens.push(c)
+            }
+        })
+        if (this.token) {
+            this.tokens.push(this.token)
+            }
+            console.log(this.tokens)
+            return this.tokens
+      }
+    }
+    let tree = new Node('-',[1,new Node('+',[1,new Node('*',[6,3])])])
+    console.log(tree,tree.calc(),tree.toString())
+    console.assert( new Node('-',[1,new Node('+',[1,new Node('*',[6,3])])]).calc() === -18 )
+    console.log( new Node('-',[new Node('+',[1,2]),new Node('+',[1,new Node('*',[6,3])])]).calc()  )
+    console.assert(new Node('+',[1,1]).calc() === 2)
+    console.assert(new Node('*',[8,new Node('-',[8,5])]).calc()===24)
+    let delect = new Delect('30+5-2+5')
+    let ccc = /(\d+[+-/*]\d+)/
+    console.log(ccc.test('30+5-2+5'))
+    //var arr =  ['30','+','5','-','2','+','5']'30 5 + 2 -5 +'
+    console.log(new Node('+',[5,new Node('-',[2,new Node('+',[30,5])])]).calc())
+    delect.reverse()
+    console.log(ccc.exec('3+5-2+5'))
+   
+    
+    class Zhan1{
+      constructor(){
+        this.item =[]
+      }
+      push(element){
+        this.item.push(element)
+      }
+      pop(){
+        return this.item.pop()
+      }
+    }
+    class Zhan2{
+      constructor(){
+        this.item =[]
+      }
+      push(element){
+        this.item.push(element)
+      }
+      pop(){
+        return this.item.pop()
+      }
+    }
+    let zhan1 = new Zhan1()
+    let zhan2 = new Zhan2()
+    delect.forEach((item,index)=>{
+      if(['+','-','*','/','(',')'].includes(item)){
+        zhan2.push(item)
+      }else{
+        zhan1.push(item)
+      }
+    })
+     console.log(zhan1.item,zhan2.item)
+    function tr(){
+       
+      if(zhan1.item.length === 2){
+       return new Node (zhan2.pop(),[zhan1.pop(),zhan1.pop()])
+      }else{
+      return new Node(zhan2.pop(),[zhan1.pop(),tr()])
+      }
+    }
+    
+    console.log(tr())
+    </script>
+    
+</body>
+</html>
